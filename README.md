@@ -3,7 +3,7 @@ racktables-quickstart
 Install 0.20.7 racktables on openshit
 Howto
 =========
-`rhc app create racktables php-5.3 mysql-5.1  --from-code https://github.com/racktables-quickstart.git`
+`rhc app create racktables php-5.3 mysql-5.1  --from-code https://github.com/sheepkiller/racktables-quickstart.git`
 Log as admin/admin
 
 Customize
