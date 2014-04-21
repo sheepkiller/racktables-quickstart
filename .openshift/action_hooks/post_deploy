@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -d ${OPENSHIFT_REPO_DIR}/php ]; then
+   rm -fr ${OPENSHIFT_REPO_DIR}/php
+fi
+
+ln -sf  ${OPENSHIFT_REPO_DIR}/wwwroot  ${OPENSHIFT_REPO_DIR}/php
+

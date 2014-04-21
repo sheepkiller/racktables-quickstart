@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+
+# looselay inspired by https://github.com/openshift/wordpress-example/
+# Kudos!
+
+MYSQL_CMD="/usr/bin/mysql -u ${OPENSHIFT_MYSQL_DB_USERNAME} --password=${OPENSHIFT_MYSQL_DB_PASSWORD} -h ${OPENSHIFT_MYSQL_DB_HOST} -P ${OPENSHIFT_MYSQL_DB_PORT}"
+
+if [ ! -f ${OPENSHIFT_REPO_DIR}/wwwroot/inc/secret.php ]; then
+    cp ${OPENSHIFT_REPO_DIR}/.openshift/share/secret.php.tmpl  $OPENSHIFT_REPO_DIR/wwwroot/inc/secret.php
+    chmod 444 $OPENSHIFT_REPO_DIR/wwwroot/inc/secret.php
+fi
+
+	
+# Confirm database exists, if not create it
+if ! ${MYSQL_CMD} -e "select * from Config;" "${OPENSHIFT_APP_NAME}" > /dev/null 2>&1
+then
+    cat ${OPENSHIFT_REPO_DIR}/.openshift/share/init.sql | ${MYSQL_CMD} ${OPENSHIFT_APP_NAME}		
+else		
+    echo "Database already configured."
+fi
